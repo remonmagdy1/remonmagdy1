@@ -67,15 +67,84 @@ npx http-server
 http://localhost:8000
 ```
 
-### 3. تحويل لتطبيق سطح مكتب (Electron)
+### 3. تطبيق سطح المكتب (Electron) - موصى به
 ```bash
-# تثبيت Electron
-npm install electron --save-dev
+# تشغيل سريع
+./start.sh        # Linux/macOS
+start.bat         # Windows
 
-# إنشاء ملف main.js
-# تشغيل التطبيق
+# أو باستخدام Node.js
+npm install
 npm start
+
+# بناء التطبيق للتوزيع
+npm run build
 ```
+
+### 4. تطبيق PWA (الهاتف المحمول)
+1. افتح التطبيق في متصفح الهاتف
+2. اضغط "إضافة إلى الشاشة الرئيسية"
+3. سيظهر التطبيق كأيقونة منفصلة
+
+### 5. Docker
+```bash
+# تشغيل باستخدام Docker
+docker-compose up -d
+
+# الوصول على: http://localhost:8080
+```
+
+## 🖥️ تطبيق سطح المكتب
+
+### الميزات المحسنة
+- **أداء أصلي** على Windows, macOS, Linux
+- **شاشة بداية** جذابة مع شعار رينج لايت
+- **قوائم أصلية** متكاملة مع نظام التشغيل
+- **إشعارات نظام** للتنبيهات المهمة
+- **طباعة محسنة** مع دعم الطابعات المحلية
+- **تحديث تلقائي** للإصدارات الجديدة
+- **عمل بدون إنترنت** كاملاً
+
+### ملفات التوزيع
+- **Windows**: `رينج لايت-1.0.0-x64.exe` (ملف تثبيت)
+- **macOS**: `رينج لايت-1.0.0-x64.dmg` (ملف DMG)
+- **Linux**: `رينج لايت-1.0.0-x64.AppImage` (تطبيق محمول)
+
+### بناء التطبيق
+```bash
+# بناء للمنصة الحالية
+npm run build
+
+# بناء لجميع المنصات
+npm run build-all
+
+# بناء نسخة محمولة (Windows)
+npm run build-portable
+```
+
+للمزيد من التفاصيل، راجع [DESKTOP_APP.md](DESKTOP_APP.md) و [BUILD.md](BUILD.md).
+
+## 🐳 Docker
+
+### تشغيل سريع
+```bash
+# تشغيل التطبيق الأساسي
+docker-compose up -d
+
+# تشغيل مع قاعدة البيانات
+docker-compose --profile database up -d
+
+# تشغيل مع المراقبة
+docker-compose --profile monitoring up -d
+```
+
+### الخدمات المتاحة
+- **التطبيق الرئيسي**: http://localhost:8080
+- **خادم الويب**: http://localhost:80
+- **Grafana**: http://localhost:3000 (مع profile monitoring)
+- **Prometheus**: http://localhost:9090 (مع profile monitoring)
+
+للمزيد من التفاصيل، راجع [DOCKER.md](DOCKER.md).
 
 ## دليل الاستخدام السريع
 
@@ -157,24 +226,45 @@ location.reload();
 ### هيكل المشروع
 ```
 ringlight-pos/
-├── index.html          # الصفحة الرئيسية
-├── css/               # ملفات الأنماط
-│   ├── style.css      # الأنماط الرئيسية
-│   ├── themes.css     # الثيمات
-│   └── print.css      # أنماط الطباعة
-├── js/                # ملفات JavaScript
-│   ├── main.js        # الملف الرئيسي
-│   ├── app.js         # وظائف التطبيق
-│   ├── database.js    # إدارة قاعدة البيانات
-│   ├── utils.js       # الوظائف المساعدة
-│   ├── dashboard.js   # لوحة المعلومات
-│   ├── products.js    # إدارة المنتجات
-│   ├── sales.js       # نظام المبيعات
-│   └── ...           # ملفات أخرى
-├── assets/            # الموارد
-│   ├── icons/         # الأيقونات
-│   └── images/        # الصور
-└── docs/              # التوثيق
+├── index.html              # الصفحة الرئيسية
+├── manifest.json           # PWA manifest
+├── sw.js                   # Service Worker
+├── package.json            # تبعيات Node.js
+├── electron-main.js        # Electron main process
+├── electron-preload.js     # Electron preload script
+├── start.js                # سكريبت التشغيل السريع
+├── start.sh / start.bat    # سكريبت تشغيل النظام
+├── Dockerfile              # Docker configuration
+├── docker-compose.yml     # Docker Compose
+├── Makefile               # أوامر البناء
+├── css/                   # ملفات الأنماط
+│   ├── style.css          # الأنماط الرئيسية
+│   ├── themes.css         # 11 ثيم مختلف
+│   └── print.css          # أنماط الطباعة
+├── js/                    # ملفات JavaScript
+│   ├── main.js            # التطبيق الرئيسي
+│   ├── app.js             # وظائف إضافية
+│   ├── database.js        # قاعدة البيانات المحلية
+│   ├── utils.js           # الوظائف المساعدة
+│   ├── dashboard.js       # لوحة المعلومات
+│   ├── products.js        # إدارة المنتجات
+│   └── sales.js           # نظام المبيعات
+├── assets/                # الموارد
+│   ├── icons/             # أيقونات التطبيق
+│   └── images/            # الصور
+├── build/                 # ملفات البناء
+│   ├── installer.nsh      # NSIS installer script
+│   ├── entitlements.mac.plist  # macOS entitlements
+│   ├── linux-after-install.sh # Linux post-install
+│   └── linux-after-remove.sh  # Linux post-remove
+└── docs/                  # التوثيق
+    ├── README.md          # التوثيق الرئيسي
+    ├── INSTALL.md         # دليل التثبيت
+    ├── QUICKSTART.md      # البدء السريع
+    ├── BUILD.md           # دليل البناء
+    ├── DESKTOP_APP.md     # دليل تطبيق سطح المكتب
+    ├── DOCKER.md          # دليل Docker
+    └── CHANGELOG.md       # سجل التغييرات
 ```
 
 ### إضافة ميزات جديدة

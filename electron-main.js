@@ -1,9 +1,11 @@
 // رينج لايت - ملف Electron الرئيسي
 // Electron Main Process
 
-const { app, BrowserWindow, Menu, ipcMain, dialog, shell } = require('electron');
+const { app, BrowserWindow, Menu, ipcMain, dialog, shell, nativeTheme, powerMonitor, screen } = require('electron');
+const { autoUpdater } = require('electron-updater');
 const path = require('path');
 const fs = require('fs');
+const os = require('os');
 
 // تفعيل إعادة التحميل التلقائي في بيئة التطوير
 if (process.env.NODE_ENV === 'development') {
@@ -16,8 +18,10 @@ if (process.env.NODE_ENV === 'development') {
 class RingLightApp {
     constructor() {
         this.mainWindow = null;
+        this.splashWindow = null;
         this.isQuitting = false;
-        
+        this.isFirstRun = false;
+
         this.init();
     }
 
@@ -52,8 +56,9 @@ class RingLightApp {
     setupEvents() {
         // عند جاهزية التطبيق
         app.whenReady().then(() => {
-            this.createMainWindow();
-            
+            this.createSplashWindow();
+            this.setupAutoUpdater();
+
             // على macOS، إعادة إنشاء النافذة عند النقر على الأيقونة
             app.on('activate', () => {
                 if (BrowserWindow.getAllWindows().length === 0) {
@@ -78,6 +83,108 @@ class RingLightApp {
         app.on('will-quit', (event) => {
             // يمكن إضافة منطق حفظ البيانات هنا
         });
+    }
+
+    createSplashWindow() {
+        // إنشاء نافذة البداية
+        this.splashWindow = new BrowserWindow({
+            width: 400,
+            height: 300,
+            frame: false,
+            alwaysOnTop: true,
+            transparent: true,
+            webPreferences: {
+                nodeIntegration: false,
+                contextIsolation: true
+            }
+        });
+
+        // تحميل صفحة البداية
+        this.splashWindow.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(`
+            <!DOCTYPE html>
+            <html dir="rtl" lang="ar">
+            <head>
+                <meta charset="UTF-8">
+                <style>
+                    body {
+                        margin: 0;
+                        padding: 0;
+                        background: linear-gradient(135deg, #4f46e5, #7c3aed);
+                        color: white;
+                        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: center;
+                        height: 100vh;
+                        border-radius: 10px;
+                        overflow: hidden;
+                    }
+                    .logo {
+                        width: 80px;
+                        height: 80px;
+                        background: rgba(255,255,255,0.2);
+                        border-radius: 50%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 32px;
+                        margin-bottom: 20px;
+                        animation: pulse 2s infinite;
+                    }
+                    .title {
+                        font-size: 24px;
+                        font-weight: bold;
+                        margin-bottom: 10px;
+                    }
+                    .subtitle {
+                        font-size: 14px;
+                        opacity: 0.8;
+                        margin-bottom: 30px;
+                    }
+                    .loading {
+                        width: 200px;
+                        height: 4px;
+                        background: rgba(255,255,255,0.3);
+                        border-radius: 2px;
+                        overflow: hidden;
+                    }
+                    .loading-bar {
+                        width: 0%;
+                        height: 100%;
+                        background: white;
+                        border-radius: 2px;
+                        animation: loading 3s ease-in-out;
+                    }
+                    @keyframes pulse {
+                        0%, 100% { transform: scale(1); }
+                        50% { transform: scale(1.1); }
+                    }
+                    @keyframes loading {
+                        0% { width: 0%; }
+                        100% { width: 100%; }
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="logo">💡</div>
+                <div class="title">رينج لايت</div>
+                <div class="subtitle">نظام إدارة نقاط البيع العربي</div>
+                <div class="loading">
+                    <div class="loading-bar"></div>
+                </div>
+            </body>
+            </html>
+        `)}`);
+
+        // إغلاق splash window بعد 3 ثواني وإنشاء النافذة الرئيسية
+        setTimeout(() => {
+            this.createMainWindow();
+            if (this.splashWindow) {
+                this.splashWindow.close();
+                this.splashWindow = null;
+            }
+        }, 3000);
     }
 
     createMainWindow() {
@@ -140,6 +247,54 @@ class RingLightApp {
         const iconName = process.platform === 'win32' ? 'icon.ico' : 
                         process.platform === 'darwin' ? 'icon.icns' : 'icon.png';
         return path.join(__dirname, 'assets', 'icons', iconName);
+    }
+
+    setupAutoUpdater() {
+        // إعداد التحديث التلقائي
+        autoUpdater.checkForUpdatesAndNotify();
+
+        autoUpdater.on('checking-for-update', () => {
+            console.log('البحث عن تحديثات...');
+        });
+
+        autoUpdater.on('update-available', (info) => {
+            console.log('تحديث متاح:', info.version);
+            dialog.showMessageBox(this.mainWindow, {
+                type: 'info',
+                title: 'تحديث متاح',
+                message: `يتوفر تحديث جديد (${info.version}). سيتم تحميله في الخلفية.`,
+                buttons: ['موافق']
+            });
+        });
+
+        autoUpdater.on('update-not-available', (info) => {
+            console.log('لا توجد تحديثات متاحة');
+        });
+
+        autoUpdater.on('error', (err) => {
+            console.error('خطأ في التحديث:', err);
+        });
+
+        autoUpdater.on('download-progress', (progressObj) => {
+            let log_message = `سرعة التحميل: ${progressObj.bytesPerSecond}`;
+            log_message = log_message + ` - تم تحميل ${progressObj.percent}%`;
+            log_message = log_message + ` (${progressObj.transferred}/${progressObj.total})`;
+            console.log(log_message);
+        });
+
+        autoUpdater.on('update-downloaded', (info) => {
+            console.log('تم تحميل التحديث');
+            dialog.showMessageBox(this.mainWindow, {
+                type: 'info',
+                title: 'تحديث جاهز',
+                message: 'تم تحميل التحديث. سيتم تطبيقه عند إعادة تشغيل التطبيق.',
+                buttons: ['إعادة التشغيل الآن', 'لاحقاً']
+            }).then((result) => {
+                if (result.response === 0) {
+                    autoUpdater.quitAndInstall();
+                }
+            });
+        });
     }
 
     setupMenu() {
