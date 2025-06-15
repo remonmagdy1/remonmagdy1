@@ -1,0 +1,198 @@
+{
+  "name": "رينج لايت - نظام إدارة نقاط البيع العربي",
+  "short_name": "رينج لايت",
+  "description": "نظام إدارة نقاط بيع شامل ومجاني باللغة العربية، مصمم خصيصاً للشركات الصغيرة والمتوسطة",
+  "version": "1.0.0",
+  "manifest_version": 2,
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "theme_color": "#4f46e5",
+  "background_color": "#f8fafc",
+  "lang": "ar",
+  "dir": "rtl",
+  "categories": [
+    "business",
+    "productivity",
+    "finance"
+  ],
+  "icons": [
+    {
+      "src": "assets/icons/icon-72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/icons/icon-96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/icons/icon-128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/icons/icon-144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/icons/icon-152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/icons/icon-384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "assets/images/screenshot-desktop-1.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "platform": "wide",
+      "label": "لوحة المعلومات الرئيسية"
+    },
+    {
+      "src": "assets/images/screenshot-desktop-2.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "platform": "wide",
+      "label": "نظام المبيعات"
+    },
+    {
+      "src": "assets/images/screenshot-mobile-1.png",
+      "sizes": "360x640",
+      "type": "image/png",
+      "platform": "narrow",
+      "label": "الواجهة على الهاتف المحمول"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "بيع جديد",
+      "short_name": "بيع جديد",
+      "description": "بدء عملية بيع جديدة",
+      "url": "/?action=new-sale",
+      "icons": [
+        {
+          "src": "assets/icons/shortcut-sale.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "إدارة المنتجات",
+      "short_name": "المنتجات",
+      "description": "إدارة المنتجات والمخزون",
+      "url": "/?action=products",
+      "icons": [
+        {
+          "src": "assets/icons/shortcut-products.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "التقارير",
+      "short_name": "التقارير",
+      "description": "عرض التقارير والإحصائيات",
+      "url": "/?action=reports",
+      "icons": [
+        {
+          "src": "assets/icons/shortcut-reports.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "العملاء",
+      "short_name": "العملاء",
+      "description": "إدارة العملاء والديون",
+      "url": "/?action=customers",
+      "icons": [
+        {
+          "src": "assets/icons/shortcut-customers.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+  "related_applications": [
+    {
+      "platform": "play",
+      "url": "https://play.google.com/store/apps/details?id=com.ringlight.pos",
+      "id": "com.ringlight.pos"
+    },
+    {
+      "platform": "itunes",
+      "url": "https://apps.apple.com/app/ringlight-pos/id123456789"
+    },
+    {
+      "platform": "windows",
+      "url": "https://www.microsoft.com/store/apps/9NBLGGH4NNS1"
+    }
+  ],
+  "prefer_related_applications": false,
+  "protocol_handlers": [
+    {
+      "protocol": "web+ringlight",
+      "url": "/?protocol=%s"
+    }
+  ],
+  "file_handlers": [
+    {
+      "action": "/",
+      "accept": {
+        "application/json": [".rlb", ".json"]
+      },
+      "launch_type": "single-client"
+    }
+  ],
+  "share_target": {
+    "action": "/share",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url",
+      "files": [
+        {
+          "name": "file",
+          "accept": ["application/json", ".rlb"]
+        }
+      ]
+    }
+  },
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  "launch_handler": {
+    "client_mode": "focus-existing"
+  },
+  "handle_links": "preferred",
+  "capture_links": "existing-client-navigate"
+}
