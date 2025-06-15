@@ -1,0 +1,275 @@
+{
+  "appId": "com.ringlight.pos",
+  "productName": "رينج لايت - نظام إدارة نقاط البيع",
+  "copyright": "Copyright © 2024 رينج لايت",
+  "directories": {
+    "output": "dist",
+    "buildResources": "build"
+  },
+  "files": [
+    "**/*",
+    "!node_modules",
+    "!dist",
+    "!build",
+    "!.git",
+    "!.gitignore",
+    "!.github",
+    "!docs",
+    "!test",
+    "!tests",
+    "!*.md",
+    "!package-lock.json",
+    "!yarn.lock"
+  ],
+  "extraResources": [
+    {
+      "from": "assets",
+      "to": "assets"
+    }
+  ],
+  "win": {
+    "target": [
+      {
+        "target": "nsis",
+        "arch": ["x64", "ia32"]
+      },
+      {
+        "target": "portable",
+        "arch": ["x64", "ia32"]
+      },
+      {
+        "target": "zip",
+        "arch": ["x64", "ia32"]
+      }
+    ],
+    "icon": "assets/icons/icon.ico",
+    "requestedExecutionLevel": "asInvoker",
+    "artifactName": "${productName}-${version}-${arch}.${ext}",
+    "publisherName": "رينج لايت",
+    "verifyUpdateCodeSignature": false,
+    "extraFiles": [
+      {
+        "from": "assets/drivers/windows",
+        "to": "drivers",
+        "filter": ["**/*"]
+      }
+    ]
+  },
+  "mac": {
+    "target": [
+      {
+        "target": "dmg",
+        "arch": ["x64", "arm64"]
+      },
+      {
+        "target": "zip",
+        "arch": ["x64", "arm64"]
+      }
+    ],
+    "icon": "assets/icons/icon.icns",
+    "category": "public.app-category.business",
+    "artifactName": "${productName}-${version}-${arch}.${ext}",
+    "hardenedRuntime": true,
+    "gatekeeperAssess": false,
+    "entitlements": "build/entitlements.mac.plist",
+    "entitlementsInherit": "build/entitlements.mac.plist",
+    "extraFiles": [
+      {
+        "from": "assets/drivers/mac",
+        "to": "drivers",
+        "filter": ["**/*"]
+      }
+    ]
+  },
+  "linux": {
+    "target": [
+      {
+        "target": "AppImage",
+        "arch": ["x64"]
+      },
+      {
+        "target": "deb",
+        "arch": ["x64"]
+      },
+      {
+        "target": "rpm",
+        "arch": ["x64"]
+      },
+      {
+        "target": "tar.gz",
+        "arch": ["x64"]
+      }
+    ],
+    "icon": "assets/icons/icon.png",
+    "category": "Office",
+    "artifactName": "${productName}-${version}-${arch}.${ext}",
+    "desktop": {
+      "Name": "رينج لايت",
+      "Comment": "نظام إدارة نقاط البيع العربي",
+      "Keywords": "pos;sales;retail;arabic;business;",
+      "StartupWMClass": "ringlight-pos"
+    },
+    "extraFiles": [
+      {
+        "from": "assets/drivers/linux",
+        "to": "drivers",
+        "filter": ["**/*"]
+      }
+    ]
+  },
+  "nsis": {
+    "oneClick": false,
+    "allowToChangeInstallationDirectory": true,
+    "createDesktopShortcut": true,
+    "createStartMenuShortcut": true,
+    "shortcutName": "رينج لايت",
+    "runAfterFinish": true,
+    "installerIcon": "assets/icons/installer.ico",
+    "uninstallerIcon": "assets/icons/uninstaller.ico",
+    "installerHeaderIcon": "assets/icons/installer-header.ico",
+    "installerSidebar": "assets/images/installer-sidebar.bmp",
+    "uninstallerSidebar": "assets/images/uninstaller-sidebar.bmp",
+    "language": "1025",
+    "multiLanguageInstaller": true,
+    "packElevateHelper": true,
+    "perMachine": false,
+    "allowElevation": true,
+    "include": "build/installer.nsh",
+    "script": "build/installer.nsi"
+  },
+  "dmg": {
+    "title": "${productName} ${version}",
+    "icon": "assets/icons/dmg.icns",
+    "background": "assets/images/dmg-background.png",
+    "window": {
+      "width": 540,
+      "height": 380
+    },
+    "contents": [
+      {
+        "x": 140,
+        "y": 200,
+        "type": "file"
+      },
+      {
+        "x": 400,
+        "y": 200,
+        "type": "link",
+        "path": "/Applications"
+      }
+    ],
+    "format": "UDZO",
+    "internetEnabled": true,
+    "sign": false
+  },
+  "deb": {
+    "packageCategory": "office",
+    "priority": "optional",
+    "depends": [
+      "gconf2",
+      "gconf-service",
+      "libnotify4",
+      "libappindicator1",
+      "libxtst6",
+      "libnss3"
+    ],
+    "recommends": [
+      "cups",
+      "libusb-1.0-0"
+    ],
+    "maintainer": "رينج لايت <info@ringlight.com>",
+    "vendor": "رينج لايت",
+    "synopsis": "نظام إدارة نقاط البيع العربي",
+    "description": "نظام إدارة نقاط بيع شامل ومجاني باللغة العربية، مصمم خصيصاً للشركات الصغيرة والمتوسطة. يتضمن إدارة المنتجات والعملاء والمبيعات والتقارير.",
+    "fpm": [
+      "--after-install=build/linux-after-install.sh",
+      "--after-remove=build/linux-after-remove.sh"
+    ]
+  },
+  "rpm": {
+    "packageCategory": "Office",
+    "vendor": "رينج لايت",
+    "license": "MIT",
+    "summary": "نظام إدارة نقاط البيع العربي",
+    "description": "نظام إدارة نقاط بيع شامل ومجاني باللغة العربية، مصمم خصيصاً للشركات الصغيرة والمتوسطة. يتضمن إدارة المنتجات والعملاء والمبيعات والتقارير.",
+    "requires": [
+      "gconf2",
+      "libnotify",
+      "libappindicator",
+      "libXtst",
+      "nss"
+    ],
+    "fpm": [
+      "--after-install=build/linux-after-install.sh",
+      "--after-remove=build/linux-after-remove.sh"
+    ]
+  },
+  "appImage": {
+    "license": "LICENSE",
+    "category": "Office",
+    "synopsis": "نظام إدارة نقاط البيع العربي",
+    "description": "نظام إدارة نقاط بيع شامل ومجاني باللغة العربية"
+  },
+  "snap": {
+    "grade": "stable",
+    "confinement": "strict",
+    "category": "office",
+    "summary": "نظام إدارة نقاط البيع العربي",
+    "description": "نظام إدارة نقاط بيع شامل ومجاني باللغة العربية، مصمم خصيصاً للشركات الصغيرة والمتوسطة.",
+    "plugs": [
+      "default",
+      "home",
+      "removable-media",
+      "raw-usb",
+      "serial-port",
+      "network",
+      "network-bind",
+      "cups-control"
+    ]
+  },
+  "publish": [
+    {
+      "provider": "github",
+      "owner": "remonmagdy1",
+      "repo": "ringlight-pos",
+      "releaseType": "release"
+    }
+  ],
+  "buildVersion": "1.0.0",
+  "compression": "maximum",
+  "removePackageScripts": true,
+  "nodeGypRebuild": false,
+  "buildDependenciesFromSource": false,
+  "npmRebuild": false,
+  "electronVersion": "27.0.0",
+  "electronDownload": {
+    "cache": ".electron-cache"
+  },
+  "forceCodeSigning": false,
+  "detectUpdateChannel": true,
+  "generateUpdatesFilesForAllChannels": true,
+  "releaseInfo": {
+    "releaseNotes": "الإصدار الأول من رينج لايت - نظام إدارة نقاط البيع العربي",
+    "releaseName": "رينج لايت v1.0.0",
+    "releaseDate": "2024-01-01"
+  },
+  "protocols": [
+    {
+      "name": "ringlight-pos",
+      "schemes": ["ringlight"]
+    }
+  ],
+  "fileAssociations": [
+    {
+      "ext": "rlb",
+      "name": "Ring Light Backup",
+      "description": "ملف نسخة احتياطية لرينج لايت",
+      "icon": "assets/icons/backup.ico",
+      "role": "Editor"
+    }
+  ],
+  "asarUnpack": [
+    "assets/**/*",
+    "node_modules/better-sqlite3/**/*"
+  ]
+}

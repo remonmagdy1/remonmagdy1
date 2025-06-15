@@ -1,0 +1,21 @@
+User-agent: *
+Disallow: /js/
+Disallow: /css/
+Disallow: /assets/
+Disallow: /node_modules/
+Disallow: /dist/
+Disallow: /build/
+Disallow: /*.json
+Disallow: /*.js
+Disallow: /*.css
+Disallow: /sw.js
+Disallow: /electron-main.js
+Disallow: /electron-preload.js
+
+Allow: /
+Allow: /index.html
+Allow: /manifest.json
+Allow: /assets/icons/
+Allow: /assets/images/screenshot*
+
+Sitemap: https://ringlight.com/sitemap.xml

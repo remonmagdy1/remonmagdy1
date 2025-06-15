@@ -1,118 +1,318 @@
-#
-#   Get status of the two services UmRdpService and TermService...
-#
-$svc_UmRdpService_status = (get-service UmRdpService).status
-$svc_TermService_status  = (get-service TermService ).status
+# رينج لايت - نظام إدارة نقاط البيع العربي
 
-#
-#   ... display them ...
-#
-write-host "Status of service UmRdpService: $svc_TermService_status"
-write-host "Status of service TermService:  $svc_TermService_status"
+نظام إدارة نقاط بيع شامل ومجاني باللغة العربية، مصمم خصيصاً للشركات الصغيرة والمتوسطة.
 
-#
-#   ... before stopping them ...
-stop-service UmRdpService
-stop-service TermService
+## المميزات الرئيسية
 
-#
-#   Save ACL and owner of termsrv.dll:
-#
-$termsrv_dll_acl   = get-acl c:\windows\system32\termsrv.dll
-$termsrv_dll_owner = $termsrv_dll_acl.owner
-write-host "Owner of termsrv.dll:           $termsrv_dll_owner"
+### 🏪 إدارة شاملة
+- **نظام مبيعات متقدم** - واجهة بيع سريعة وسهلة الاستخدام
+- **إدارة المنتجات** - إضافة وتعديل وتتبع المخزون
+- **إدارة العملاء** - قاعدة بيانات شاملة للعملاء
+- **إدارة الموردين** - تتبع المشتريات والموردين
+- **نظام الديون** - إدارة الديون والمدفوعات
 
-#
-#   Create backup of termsrv.dll, just in case:
-#
-copy-item    c:\windows\system32\termsrv.dll c:\windows\system32\termsrv.dll.copy
+### 📊 التقارير والإحصائيات
+- **لوحة معلومات تفاعلية** - إحصائيات فورية ومؤشرات الأداء
+- **تقارير مفصلة** - مبيعات، مخزون، عملاء، أرباح
+- **رسوم بيانية** - تصور البيانات بطريقة واضحة
+- **تصدير التقارير** - إمكانية طباعة وتصدير التقارير
 
-#
-#   Take ownership of the DLL...
-#
-takeown   /f c:\windows\system32\termsrv.dll
+### 🎨 تصميم عصري
+- **واجهة عربية كاملة** - دعم RTL والأرقام العربية الهندية
+- **تصميم متجاوب** - يعمل على جميع الأجهزة والشاشات
+- **ثيمات متعددة** - ١١ ثيم مختلف بألوان متنوعة
+- **تصميم Neumorphism** - مظهر عصري وجذاب
 
-$new_termsrv_dll_owner = (get-acl c:\windows\system32\termsrv.dll).owner
+### 🔒 الأمان والموثوقية
+- **حماية بكلمة مرور** - تأمين الوصول للنظام
+- **نسخ احتياطية** - حفظ واستعادة البيانات
+- **تشفير البيانات** - حماية المعلومات الحساسة
+- **عمل محلي** - لا يحتاج اتصال إنترنت
 
-#
-#    ... and grant (/G) full control (:F) to myself:
-#
-# cacls c:\windows\system32\termsrv.dll /G $new_termsrv_dll_owner:F
-cacls c:\windows\system32\termsrv.dll /G rene:F
+## متطلبات التشغيل
 
+### الحد الأدنى
+- متصفح ويب حديث (Chrome, Firefox, Safari, Edge)
+- دقة شاشة: 1024x768 أو أعلى
+- ذاكرة: 2GB RAM
+- مساحة تخزين: 100MB
 
-#
-#   Read DLL as byte-array in order to modify the bytes.
-#
-#   See https://stackoverflow.com/a/57342311/180275 for some details.
-#
-# $dll_as_bytes = get-content c:\windows\system32\termsrv.dll -raw -asByteStream    # PowerShell Core version
-  $dll_as_bytes = get-content c:\windows\system32\termsrv.dll -raw -encoding byte   # PowerShell traditional version
+### الموصى به
+- متصفح Chrome أو Firefox أحدث إصدار
+- دقة شاشة: 1920x1080 أو أعلى
+- ذاكرة: 4GB RAM أو أكثر
+- مساحة تخزين: 500MB أو أكثر
 
-#
-#   Convert the byte array to a string that represents each byte's value
-#   as hexadecimal value, separated by spaces:
-#
-$dll_as_text = $dll_as_bytes.forEach('ToString', 'X2') -join ' '
+## طريقة التشغيل
 
-#
-#   Search for byte array (which is dependent on the Windows edition) and replace them.
-#   See
-#      http://woshub.com/how-to-allow-multiple-rdp-sessions-in-windows-10/
-#   for details.
-#
-# $dll_as_text_replaced = $dll_as_text -replace '39 81 3C 06 00 00 0F 84 5D 61 01 00', 'B8 00 01 00 00 89 81 38 06 00 00 90' # Windows 1909
-  $dll_as_text_replaced = $dll_as_text -replace '39 81 3C 06 00 00 0F 84 5D 61 01 00', 'B8 00 01 00 00 89 81 38 06 00 00 90' # Windows 1903
-# $dll_as_text_replaced = $dll_as_text -replace '39 81 3C 06 00 00 0F 84 3B 2B 01 00', 'B8 00 01 00 00 89 81 38 06 00 00 90' # Windows 1809
-# $dll_as_text_replaced = $dll_as_text -replace '8B 99 3C 06 00 00 8B B9 38 06 00 00', 'B8 00 01 00 00 89 81 38 06 00 00 90' # Windows 1803
-# $dll_as_text_replaced = $dll_as_text -replace '8B 99 3C 06 00 00 8B B9 38 06 00 00', 'B8 00 01 00 00 89 81 38 06 00 00 90' # Windows 1803
+### 1. التشغيل المباشر
+```bash
+# تحميل الملفات
+git clone https://github.com/remonmagdy1/ringlight-pos.git
+cd ringlight-pos
 
+# فتح الملف في المتصفح
+open index.html
+```
 
-#
-#   Use the replaced string to create a byte array again
-#
-# [byte[]] $dll_as_bytes_replaced = -split $dll_as_text_replaced -replace '^', '0x' # PowerShell Core version
-  [byte[]] $dll_as_bytes_replaced = -split $dll_as_text_replaced -replace '^', '0x' # PoserShell traditional version
+### 2. استخدام خادم محلي
+```bash
+# باستخدام Python
+python -m http.server 8000
 
-#
-#   Create termsrv.dll.patched from byte array:
-#
-set-content c:\windows\system32\termsrv.dll.patched -encoding byte -Value $dll_as_bytes_replaced
+# باستخدام Node.js
+npx http-server
 
-#
-#   Compare patched and original DLL (/b: binary comparison)
-#
-fc.exe /b c:\windows\system32\termsrv.dll.patched c:\windows\system32\termsrv.dll
-#
-#   Expected output something like:
-#
-#       0001F215: B8 39
-#       0001F216: 00 81
-#       0001F217: 01 3C
-#       0001F218: 00 06
-#       0001F21A: 89 00
-#       0001F21B: 81 0F
-#       0001F21C: 38 84
-#       0001F21D: 06 5D
-#       0001F21E: 00 61
-#       0001F21F: 00 01
-#       0001F220: 90 00
-#
+# ثم افتح المتصفح على
+http://localhost:8000
+```
 
-#
-#   Overwrite original DLL with patched version:
-#
-copy-item c:\windows\system32\termsrv.dll.patched c:\windows\system32\termsrv.dll
+### 3. تطبيق سطح المكتب (Electron) - موصى به
+```bash
+# تشغيل سريع
+./start.sh        # Linux/macOS
+start.bat         # Windows
 
-#
-#   Restore original ACL:
-#
-set-acl c:\windows\system32\termsrv.dll $termsrv_dll_acl
+# أو باستخدام Node.js
+npm install
+npm start
 
-#
-#   Start services again:
-#
-# start-service UmRdpService
-# start-service TermService
-sc start TermService
-sc start UmRdpService
+# بناء التطبيق للتوزيع
+npm run build
+```
+
+### 4. تطبيق PWA (الهاتف المحمول)
+1. افتح التطبيق في متصفح الهاتف
+2. اضغط "إضافة إلى الشاشة الرئيسية"
+3. سيظهر التطبيق كأيقونة منفصلة
+
+### 5. Docker
+```bash
+# تشغيل باستخدام Docker
+docker-compose up -d
+
+# الوصول على: http://localhost:8080
+```
+
+## 🖥️ تطبيق سطح المكتب
+
+### الميزات المحسنة
+- **أداء أصلي** على Windows, macOS, Linux
+- **شاشة بداية** جذابة مع شعار رينج لايت
+- **قوائم أصلية** متكاملة مع نظام التشغيل
+- **إشعارات نظام** للتنبيهات المهمة
+- **طباعة محسنة** مع دعم الطابعات المحلية
+- **تحديث تلقائي** للإصدارات الجديدة
+- **عمل بدون إنترنت** كاملاً
+
+### ملفات التوزيع
+- **Windows**: `رينج لايت-1.0.0-x64.exe` (ملف تثبيت)
+- **macOS**: `رينج لايت-1.0.0-x64.dmg` (ملف DMG)
+- **Linux**: `رينج لايت-1.0.0-x64.AppImage` (تطبيق محمول)
+
+### بناء التطبيق
+```bash
+# بناء للمنصة الحالية
+npm run build
+
+# بناء لجميع المنصات
+npm run build-all
+
+# بناء نسخة محمولة (Windows)
+npm run build-portable
+```
+
+للمزيد من التفاصيل، راجع [DESKTOP_APP.md](DESKTOP_APP.md) و [BUILD.md](BUILD.md).
+
+## 🐳 Docker
+
+### تشغيل سريع
+```bash
+# تشغيل التطبيق الأساسي
+docker-compose up -d
+
+# تشغيل مع قاعدة البيانات
+docker-compose --profile database up -d
+
+# تشغيل مع المراقبة
+docker-compose --profile monitoring up -d
+```
+
+### الخدمات المتاحة
+- **التطبيق الرئيسي**: http://localhost:8080
+- **خادم الويب**: http://localhost:80
+- **Grafana**: http://localhost:3000 (مع profile monitoring)
+- **Prometheus**: http://localhost:9090 (مع profile monitoring)
+
+للمزيد من التفاصيل، راجع [DOCKER.md](DOCKER.md).
+
+## دليل الاستخدام السريع
+
+### تسجيل الدخول
+- كلمة المرور الافتراضية: `123`
+- يمكن تغييرها من الإعدادات
+
+### إضافة منتج جديد
+1. اذهب إلى صفحة "المنتجات"
+2. اضغط "إضافة منتج جديد"
+3. املأ البيانات المطلوبة
+4. احفظ المنتج
+
+### إجراء عملية بيع
+1. اذهب إلى صفحة "المبيعات"
+2. اختر المنتجات من الشبكة
+3. حدد العميل (اختياري)
+4. اختر طريقة الدفع
+5. اضغط "إتمام البيع"
+
+### طباعة الفواتير
+- يتم طباعة الفاتورة تلقائياً بعد إتمام البيع
+- يمكن إعادة طباعة الفواتير من سجل المبيعات
+
+## الإعدادات والتخصيص
+
+### بيانات الشركة
+- اسم الشركة وعنوانها
+- معلومات الاتصال
+- شعار الشركة
+- نسبة الضريبة
+
+### إعدادات النظام
+- اختيار الثيم
+- تفعيل الحفظ التلقائي
+- إعدادات الطباعة
+
+### النسخ الاحتياطي
+- إنشاء نسخة احتياطية يدوياً
+- استعادة البيانات من نسخة احتياطية
+- نسخ احتياطية تلقائية يومية
+
+## اختصارات لوحة المفاتيح
+
+| الاختصار | الوظيفة |
+|---------|---------|
+| `Ctrl + S` | حفظ |
+| `Esc` | إغلاق النوافذ |
+| `F1` | المساعدة |
+| `F2` | إتمام البيع |
+| `F3` | بيع جديد |
+| `F4` | فتح درج النقد |
+
+## استكشاف الأخطاء
+
+### مشاكل شائعة وحلولها
+
+**المشكلة**: لا يتم حفظ البيانات  
+**الحل**: تأكد من تفعيل localStorage في المتصفح
+
+**المشكلة**: الخطوط لا تظهر بشكل صحيح  
+**الحل**: تأكد من اتصال الإنترنت لتحميل خط Cairo
+
+**المشكلة**: الطباعة لا تعمل  
+**الحل**: تأكد من إعدادات الطباعة في المتصفح
+
+**المشكلة**: البيانات مفقودة  
+**الحل**: استعد البيانات من النسخة الاحتياطية
+
+### مسح البيانات
+```javascript
+// في وحدة تحكم المتصفح
+localStorage.clear();
+location.reload();
+```
+
+## التطوير والمساهمة
+
+### هيكل المشروع
+```
+ringlight-pos/
+├── index.html              # الصفحة الرئيسية
+├── manifest.json           # PWA manifest
+├── sw.js                   # Service Worker
+├── package.json            # تبعيات Node.js
+├── electron-main.js        # Electron main process
+├── electron-preload.js     # Electron preload script
+├── start.js                # سكريبت التشغيل السريع
+├── start.sh / start.bat    # سكريبت تشغيل النظام
+├── Dockerfile              # Docker configuration
+├── docker-compose.yml     # Docker Compose
+├── Makefile               # أوامر البناء
+├── css/                   # ملفات الأنماط
+│   ├── style.css          # الأنماط الرئيسية
+│   ├── themes.css         # 11 ثيم مختلف
+│   └── print.css          # أنماط الطباعة
+├── js/                    # ملفات JavaScript
+│   ├── main.js            # التطبيق الرئيسي
+│   ├── app.js             # وظائف إضافية
+│   ├── database.js        # قاعدة البيانات المحلية
+│   ├── utils.js           # الوظائف المساعدة
+│   ├── dashboard.js       # لوحة المعلومات
+│   ├── products.js        # إدارة المنتجات
+│   └── sales.js           # نظام المبيعات
+├── assets/                # الموارد
+│   ├── icons/             # أيقونات التطبيق
+│   └── images/            # الصور
+├── build/                 # ملفات البناء
+│   ├── installer.nsh      # NSIS installer script
+│   ├── entitlements.mac.plist  # macOS entitlements
+│   ├── linux-after-install.sh # Linux post-install
+│   └── linux-after-remove.sh  # Linux post-remove
+└── docs/                  # التوثيق
+    ├── README.md          # التوثيق الرئيسي
+    ├── INSTALL.md         # دليل التثبيت
+    ├── QUICKSTART.md      # البدء السريع
+    ├── BUILD.md           # دليل البناء
+    ├── DESKTOP_APP.md     # دليل تطبيق سطح المكتب
+    ├── DOCKER.md          # دليل Docker
+    └── CHANGELOG.md       # سجل التغييرات
+```
+
+### إضافة ميزات جديدة
+1. أنشئ ملف JavaScript جديد في مجلد `js/`
+2. أضف الأنماط المطلوبة في `css/style.css`
+3. اربط الملف في `index.html`
+4. اختبر الميزة الجديدة
+
+### المساهمة
+- Fork المشروع
+- أنشئ branch جديد للميزة
+- اكتب كود نظيف ومعلق
+- اختبر التغييرات
+- أرسل Pull Request
+
+## الترخيص والدعم
+
+### الترخيص
+هذا المشروع مرخص تحت رخصة MIT - انظر ملف [LICENSE](LICENSE) للتفاصيل.
+
+### الدعم الفني
+- **التوثيق**: [docs/](docs/)
+- **المشاكل**: [GitHub Issues](https://github.com/remonmagdy1/ringlight-pos/issues)
+- **المناقشات**: [GitHub Discussions](https://github.com/remonmagdy1/ringlight-pos/discussions)
+
+### التحديثات
+- تحقق من التحديثات بانتظام
+- اقرأ ملاحظات الإصدار قبل التحديث
+- انشئ نسخة احتياطية قبل التحديث
+
+## خطط التطوير المستقبلية
+
+### الإصدار القادم (v2.0)
+- [ ] دعم الباركود والماسحات الضوئية
+- [ ] تكامل مع طابعات الإيصالات
+- [ ] نظام المرتجعات المتقدم
+- [ ] إدارة الفروع المتعددة
+- [ ] تطبيق الهاتف المحمول
+
+### الميزات المطلوبة
+- [ ] دعم العملات المتعددة
+- [ ] تكامل مع أنظمة المحاسبة
+- [ ] إدارة الموظفين والصلاحيات
+- [ ] نظام الولاء والنقاط
+- [ ] تقارير متقدمة مع AI
+
+---
+
+**رينج لايت** - نظام إدارة نقاط البيع العربي الشامل والمجاني
+
+© 2024 رينج لايت. جميع الحقوق محفوظة.

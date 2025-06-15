@@ -1,0 +1,183 @@
+{
+  "name": "ringlight-pos",
+  "version": "1.0.0",
+  "description": "نظام إدارة نقاط البيع العربي الشامل والمجاني",
+  "main": "electron-main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "serve": "node start.js --server",
+    "quick-start": "node start.js",
+    "build": "electron-builder",
+    "build-all": "npm run build-win && npm run build-mac && npm run build-linux",
+    "build-win": "electron-builder --win",
+    "build-mac": "electron-builder --mac",
+    "build-linux": "electron-builder --linux",
+    "build-portable": "electron-builder --win portable",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder --publish=never",
+    "release": "electron-builder --publish=always",
+    "test": "echo \"تشغيل الاختبارات...\" && node start.js --server --port=3001",
+    "lint": "echo \"فحص الكود...\"",
+    "clean": "rimraf dist build node_modules/.cache",
+    "rebuild": "npm run clean && npm install",
+    "postinstall": "electron-builder install-app-deps",
+    "prepack": "npm run clean",
+    "predist": "npm run clean"
+  },
+  "keywords": [
+    "pos",
+    "point-of-sale",
+    "arabic",
+    "retail",
+    "inventory",
+    "sales",
+    "management",
+    "electron",
+    "javascript",
+    "html5",
+    "css3"
+  ],
+  "author": {
+    "name": "رينج لايت",
+    "email": "info@ringlight.com",
+    "url": "https://github.com/remonmagdy1/ringlight-pos"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/remonmagdy1/ringlight-pos",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/remonmagdy1/ringlight-pos.git"
+  },
+  "bugs": {
+    "url": "https://github.com/remonmagdy1/ringlight-pos/issues"
+  },
+  "devDependencies": {
+    "electron": "^27.0.0",
+    "electron-builder": "^24.6.4",
+    "electron-rebuild": "^3.2.9",
+    "concurrently": "^8.2.2",
+    "wait-on": "^7.0.1",
+    "http-server": "^14.1.1",
+    "rimraf": "^5.0.5",
+    "cross-env": "^7.0.3"
+  },
+  "dependencies": {
+    "electron-updater": "^6.1.4",
+    "electron-store": "^8.1.0",
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "compression": "^1.7.4"
+  },
+  "build": {
+    "appId": "com.ringlight.pos",
+    "productName": "رينج لايت - نظام إدارة نقاط البيع",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "**/*",
+      "!node_modules",
+      "!dist",
+      "!.git",
+      "!.gitignore",
+      "!README.md",
+      "!package-lock.json"
+    ],
+    "extraResources": [
+      {
+        "from": "assets",
+        "to": "assets"
+      }
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64", "ia32"]
+        },
+        {
+          "target": "portable",
+          "arch": ["x64", "ia32"]
+        }
+      ],
+      "icon": "assets/icons/icon.ico",
+      "requestedExecutionLevel": "asInvoker",
+      "artifactName": "${productName}-${version}-${arch}.${ext}"
+    },
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": ["x64", "arm64"]
+        },
+        {
+          "target": "zip",
+          "arch": ["x64", "arm64"]
+        }
+      ],
+      "icon": "assets/icons/icon.icns",
+      "category": "public.app-category.business",
+      "artifactName": "${productName}-${version}-${arch}.${ext}"
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": ["x64"]
+        },
+        {
+          "target": "deb",
+          "arch": ["x64"]
+        },
+        {
+          "target": "rpm",
+          "arch": ["x64"]
+        }
+      ],
+      "icon": "assets/icons/icon.png",
+      "category": "Office",
+      "artifactName": "${productName}-${version}-${arch}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "رينج لايت",
+      "include": "installer.nsh",
+      "language": "1025"
+    },
+    "dmg": {
+      "title": "${productName} ${version}",
+      "icon": "assets/icons/icon.icns",
+      "background": "assets/images/dmg-background.png",
+      "window": {
+        "width": 540,
+        "height": 380
+      },
+      "contents": [
+        {
+          "x": 140,
+          "y": 200,
+          "type": "file"
+        },
+        {
+          "x": 400,
+          "y": 200,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "publish": {
+      "provider": "github",
+      "owner": "remonmagdy1",
+      "repo": "ringlight-pos"
+    }
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  }
+}

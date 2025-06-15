@@ -1,0 +1,380 @@
+/* رينج لايت - ثيمات الألوان المختلفة */
+
+/* الثيم الأزرق (الافتراضي) */
+.theme-blue {
+    --primary-color: #4f46e5;
+    --primary-light: #6366f1;
+    --primary-dark: #3730a3;
+    --secondary-color: #10b981;
+    --accent-color: #f59e0b;
+}
+
+/* الثيم الأخضر */
+.theme-green {
+    --primary-color: #059669;
+    --primary-light: #10b981;
+    --primary-dark: #047857;
+    --secondary-color: #3b82f6;
+    --accent-color: #f59e0b;
+}
+
+/* الثيم البنفسجي */
+.theme-purple {
+    --primary-color: #7c3aed;
+    --primary-light: #8b5cf6;
+    --primary-dark: #5b21b6;
+    --secondary-color: #06b6d4;
+    --accent-color: #f59e0b;
+}
+
+/* الثيم الوردي */
+.theme-pink {
+    --primary-color: #ec4899;
+    --primary-light: #f472b6;
+    --primary-dark: #be185d;
+    --secondary-color: #10b981;
+    --accent-color: #f59e0b;
+}
+
+/* الثيم البرتقالي */
+.theme-orange {
+    --primary-color: #ea580c;
+    --primary-light: #f97316;
+    --primary-dark: #c2410c;
+    --secondary-color: #3b82f6;
+    --accent-color: #10b981;
+}
+
+/* الثيم الأحمر */
+.theme-red {
+    --primary-color: #dc2626;
+    --primary-light: #ef4444;
+    --primary-dark: #b91c1c;
+    --secondary-color: #10b981;
+    --accent-color: #f59e0b;
+}
+
+/* الثيم الرمادي */
+.theme-gray {
+    --primary-color: #6b7280;
+    --primary-light: #9ca3af;
+    --primary-dark: #4b5563;
+    --secondary-color: #10b981;
+    --accent-color: #f59e0b;
+}
+
+/* الثيم الداكن */
+.theme-dark {
+    --primary-color: #6366f1;
+    --primary-light: #818cf8;
+    --primary-dark: #4f46e5;
+    --secondary-color: #10b981;
+    --accent-color: #f59e0b;
+    
+    /* ألوان الخلفية للثيم الداكن */
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --bg-tertiary: #334155;
+    --bg-dark: #1e293b;
+    --bg-darker: #0f172a;
+    
+    /* ألوان النص للثيم الداكن */
+    --text-primary: #f8fafc;
+    --text-secondary: #cbd5e1;
+    --text-muted: #94a3b8;
+    --text-light: #ffffff;
+    
+    /* الحدود للثيم الداكن */
+    --border-color: #475569;
+}
+
+/* الثيم الذهبي */
+.theme-gold {
+    --primary-color: #d97706;
+    --primary-light: #f59e0b;
+    --primary-dark: #b45309;
+    --secondary-color: #059669;
+    --accent-color: #3b82f6;
+}
+
+/* الثيم الفيروزي */
+.theme-teal {
+    --primary-color: #0d9488;
+    --primary-light: #14b8a6;
+    --primary-dark: #0f766e;
+    --secondary-color: #3b82f6;
+    --accent-color: #f59e0b;
+}
+
+/* الثيم الأزرق الفاتح */
+.theme-sky {
+    --primary-color: #0284c7;
+    --primary-light: #0ea5e9;
+    --primary-dark: #0369a1;
+    --secondary-color: #10b981;
+    --accent-color: #f59e0b;
+}
+
+/* انتقالات الثيمات */
+body {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.top-navbar,
+.sidebar,
+.modal,
+.notification {
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.btn,
+.nav-link,
+.btn-icon {
+    transition: all 0.3s ease;
+}
+
+/* أنماط خاصة للثيم الداكن */
+.theme-dark .login-screen {
+    background: linear-gradient(135deg, var(--bg-darker), var(--bg-dark));
+}
+
+.theme-dark .search-box input {
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+}
+
+.theme-dark .search-box input::placeholder {
+    color: var(--text-muted);
+}
+
+.theme-dark .dropdown-menu a:hover {
+    background-color: var(--bg-dark);
+}
+
+.theme-dark .nav-link:hover {
+    background-color: var(--bg-dark);
+}
+
+.theme-dark .nav-item.active .nav-link {
+    background-color: rgba(99, 102, 241, 0.2);
+}
+
+.theme-dark .btn-icon:hover {
+    background-color: var(--bg-dark);
+}
+
+.theme-dark .modal-close:hover {
+    background-color: var(--bg-dark);
+}
+
+.theme-dark .input-group input {
+    background-color: var(--bg-dark);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+.theme-dark .input-group input::placeholder {
+    color: var(--text-muted);
+}
+
+.theme-dark .btn-secondary {
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    border-color: var(--border-color);
+}
+
+.theme-dark .btn-secondary:hover {
+    background-color: var(--bg-tertiary);
+}
+
+/* قائمة اختيار الثيمات */
+.theme-selector {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg);
+}
+
+.theme-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md);
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: var(--transition);
+    background-color: var(--bg-secondary);
+}
+
+.theme-option:hover {
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.theme-option.active {
+    border-color: var(--primary-color);
+    background-color: rgba(79, 70, 229, 0.1);
+}
+
+.theme-preview {
+    width: 60px;
+    height: 40px;
+    border-radius: var(--border-radius);
+    display: flex;
+    overflow: hidden;
+}
+
+.theme-preview-color {
+    flex: 1;
+    height: 100%;
+}
+
+.theme-blue .theme-preview .color-1 { background-color: #4f46e5; }
+.theme-blue .theme-preview .color-2 { background-color: #6366f1; }
+.theme-blue .theme-preview .color-3 { background-color: #10b981; }
+
+.theme-green .theme-preview .color-1 { background-color: #059669; }
+.theme-green .theme-preview .color-2 { background-color: #10b981; }
+.theme-green .theme-preview .color-3 { background-color: #3b82f6; }
+
+.theme-purple .theme-preview .color-1 { background-color: #7c3aed; }
+.theme-purple .theme-preview .color-2 { background-color: #8b5cf6; }
+.theme-purple .theme-preview .color-3 { background-color: #06b6d4; }
+
+.theme-pink .theme-preview .color-1 { background-color: #ec4899; }
+.theme-pink .theme-preview .color-2 { background-color: #f472b6; }
+.theme-pink .theme-preview .color-3 { background-color: #10b981; }
+
+.theme-orange .theme-preview .color-1 { background-color: #ea580c; }
+.theme-orange .theme-preview .color-2 { background-color: #f97316; }
+.theme-orange .theme-preview .color-3 { background-color: #3b82f6; }
+
+.theme-red .theme-preview .color-1 { background-color: #dc2626; }
+.theme-red .theme-preview .color-2 { background-color: #ef4444; }
+.theme-red .theme-preview .color-3 { background-color: #10b981; }
+
+.theme-gray .theme-preview .color-1 { background-color: #6b7280; }
+.theme-gray .theme-preview .color-2 { background-color: #9ca3af; }
+.theme-gray .theme-preview .color-3 { background-color: #10b981; }
+
+.theme-dark .theme-preview .color-1 { background-color: #0f172a; }
+.theme-dark .theme-preview .color-2 { background-color: #1e293b; }
+.theme-dark .theme-preview .color-3 { background-color: #6366f1; }
+
+.theme-gold .theme-preview .color-1 { background-color: #d97706; }
+.theme-gold .theme-preview .color-2 { background-color: #f59e0b; }
+.theme-gold .theme-preview .color-3 { background-color: #059669; }
+
+.theme-teal .theme-preview .color-1 { background-color: #0d9488; }
+.theme-teal .theme-preview .color-2 { background-color: #14b8a6; }
+.theme-teal .theme-preview .color-3 { background-color: #3b82f6; }
+
+.theme-sky .theme-preview .color-1 { background-color: #0284c7; }
+.theme-sky .theme-preview .color-2 { background-color: #0ea5e9; }
+.theme-sky .theme-preview .color-3 { background-color: #10b981; }
+
+.theme-option-name {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--text-primary);
+    text-align: center;
+}
+
+/* تأثيرات خاصة للثيمات */
+.theme-gradient {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+}
+
+.theme-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
+    transition: var(--transition);
+}
+
+.theme-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+/* أنماط الطباعة للثيمات */
+@media print {
+    .theme-dark {
+        --bg-primary: #ffffff;
+        --bg-secondary: #ffffff;
+        --bg-tertiary: #f8fafc;
+        --text-primary: #000000;
+        --text-secondary: #4b5563;
+        --text-muted: #6b7280;
+        --border-color: #e5e7eb;
+    }
+}
+
+/* تخصيص شريط التمرير للثيمات */
+.theme-dark ::-webkit-scrollbar {
+    width: 8px;
+}
+
+.theme-dark ::-webkit-scrollbar-track {
+    background: var(--bg-dark);
+}
+
+.theme-dark ::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 4px;
+}
+
+.theme-dark ::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
+}
+
+/* تأثيرات الانتقال المتقدمة */
+.theme-transition {
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* أنماط خاصة للعناصر التفاعلية */
+.interactive-element {
+    position: relative;
+    overflow: hidden;
+}
+
+.interactive-element::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.interactive-element:hover::before {
+    left: 100%;
+}
+
+/* تخصيص الألوان حسب الحالة */
+.status-active {
+    color: var(--success-color);
+}
+
+.status-inactive {
+    color: var(--text-muted);
+}
+
+.status-warning {
+    color: var(--warning-color);
+}
+
+.status-error {
+    color: var(--danger-color);
+}
+
+.status-info {
+    color: var(--primary-color);
+}
